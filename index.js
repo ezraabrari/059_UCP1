@@ -55,3 +55,16 @@ app.put('/buku/:id', async (req, res) => {
         res.status(500).send({ message: "Gagal update", error: err });
     }
 });
+
+// ✅ DELETE
+app.delete('/buku/:id', async (req, res) => {
+    try {
+        const buku = await db.buku.findByPk(req.params.id);
+        if (!buku) return res.status(404).send({ message: "buku tidak ditemukan" });
+
+        await buku.destroy();
+        res.send({ message: "buku berhasil dihapus" });
+    } catch (err) {
+        res.status(500).send({ message: "Gagal menghapus", error: err });
+    }
+});
