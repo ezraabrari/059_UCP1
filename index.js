@@ -31,3 +31,27 @@ app.get('/buku', async (req, res) => {
         res.status(500).send({ message: "Gagal mengambil data", error: err });
     }
 });
+
+// ✅ READ BY ID (GET)
+app.get('/buku/:id', async (req, res) => {
+    try {
+        const buku = await db.buku.findByPk(req.params.id);
+        if (!buku) return res.status(404).send({ message: "buku tidak ditemukan" });
+        res.send(buku);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// ✅ UPDATE (PUT)
+app.put('/buku/:id', async (req, res) => {
+    try {
+        const buku = await db.buku.findByPk(req.params.id);
+        if (!buku) return res.status(404).send({ message: "buku tidak ditemukan" });
+
+        await buku.update(req.body);
+        res.send({ message: "buku berhasil diupdate" });
+    } catch (err) {
+        res.status(500).send({ message: "Gagal update", error: err });
+    }
+});
